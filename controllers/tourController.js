@@ -123,7 +123,7 @@ exports.getTourStats = async (req, res) => {
             }
         ]);
 
-        res.status(400).json({
+        res.status(200).json({
             status: "success",
             data: {
                 stats
@@ -131,6 +131,29 @@ exports.getTourStats = async (req, res) => {
         });
 
     } catch (err) {
+        res.status(400).json({
+            status: "fail",
+            message: err
+        });
+    }
+}
+
+exports.getMonthlyPlan = async (req, res) =>{
+    try {
+        const year = req.params.year * 1;
+        const plan = await Tour.aggregate([
+           {
+                $unwind : "$startDate"
+           }
+        ]);
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                plan
+            }
+        });
+    } catch (error) {
         res.status(400).json({
             status: "fail",
             message: err
